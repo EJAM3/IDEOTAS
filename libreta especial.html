@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDEOTA - Libreta de Ideas</title>
+    <style>
+        :root {
+            --paper-color: #ffffff;
+            --line-color: #e0e0e0;
+            --margin-color: #fb3e3e;
+            --primary-color: #2c3e50;
+            --accent-color: #f39c12;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            margin: 0;
+            color: var(--primary-color);
+            letter-spacing: 8px;
+            text-shadow: 3px 3px 0px var(--accent-color);
+        }
+
+        .header p {
+            margin: 0;
+            font-style: italic;
+            color: #7f8c8d;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .notebook-container {
+            position: relative;
+            width: 90%;
+            max-width: 650px;
+            background: var(--paper-color);
+            padding: 60px 40px 40px 75px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            border-radius: 4px;
+            border-left: 12px solid var(--primary-color);
+        }
+
+        /* Línea roja de margen */
+        .notebook-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 60px;
+            height: 100%;
+            width: 2px;
+            background: var(--margin-color);
+            opacity: 0.4;
+        }
+
+        #noteContent {
+            width: 100%;
+            height: 350px;
+            background: transparent;
+            border: none;
+            line-height: 30px;
+            font-size: 19px;
+            color: #2c3e50;
+            background-image: linear-gradient(var(--line-color) 1px, transparent 1px);
+            background-size: 100% 30px;
+            resize: none;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .controls {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        button {
+            padding: 18px 50px;
+            border: 3px solid var(--primary-color);
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 900;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            box-shadow: 0 5px 0px #1a252f;
+        }
+
+        button:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 7px 0px #d68910;
+        }
+
+        button:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0px #d68910;
+        }
+
+        button:disabled {
+            background-color: #bdc3c7;
+            border-color: #bdc3c7;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        .status {
+            font-size: 1rem;
+            height: 25px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>IDEOTA</h1>
+        <p>Ideas Grandes & Ideas Tontas</p>
+    </div>
+
+    <div class="notebook-container">
+        <textarea id="noteContent" placeholder="Suelta tu próxima gran (o tonta) idea aquí..."></textarea>
+    </div>
+
+    <div class="controls">
+        <button id="sendBtn" onclick="sendToDocs()">¡SOLTAR IDEOTA!</button>
+        <div id="statusMsg" class="status"></div>
+    </div>
+
+    <script>
+        async function sendToDocs() {
+            const textArea = document.getElementById('noteContent');
+            const btn = document.getElementById('sendBtn');
+            const status = document.getElementById('statusMsg');
+            const text = textArea.value.trim();
+
+            if (!text) {
+                status.style.color = "#e74c3c";
+                status.innerText = "⚠️ La libreta está vacía.";
+                return;
+            }
+
+            // TU NUEVA ID ACTUALIZADA
+            const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby6fqHFFaQzNTnUVg1I4nwOVrdejTHZSnqkIAigZYm6UzpFJkUzF7qK1Zj4fgOoJQlV/exec";
+
+            btn.disabled = true;
+            status.style.color = "#2c3e50";
+            status.innerText = "⏳ Procesando tu IDEOTA...";
+
+            try {
+                // Enviamos los datos
+                await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    cache: 'no-cache',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        content: text,
+                        type: "IDEOTA" 
+                    })
+                });
+
+                // Si llegamos aquí (o el no-cors termina), asumimos éxito
+                status.style.color = "#27ae60";
+                status.innerText = "🚀 ¡IDEOTA enviada al Docs!";
+                textArea.value = ""; 
+                
+            } catch (error) {
+                console.error(error);
+                status.style.color = "#e74c3c";
+                status.innerText = "❌ Error al intentar enviar.";
+            } finally {
+                btn.disabled = false;
+                setTimeout(() => { status.innerText = ""; }, 5000);
+            }
+        }
+    </script>
+</body>
+</html>
