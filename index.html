@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IDEOTA - Bitácora Maestra</title>
+    <title>IDEOTAS - Bitácora Maestra</title>
     <style>
         :root {
             --paper-color: #ffffff;
@@ -42,6 +42,7 @@
             font-style: italic;
             color: #7f8c8d;
             font-weight: bold;
+            letter-spacing: 1px;
         }
 
         .notebook-container {
@@ -55,6 +56,7 @@
             border-left: 12px solid var(--primary-color);
         }
 
+        /* Línea roja de margen */
         .notebook-container::before {
             content: '';
             position: absolute;
@@ -115,6 +117,13 @@
             box-shadow: 0 2px 0px #d68910;
         }
 
+        button:disabled {
+            background-color: #bdc3c7;
+            border-color: #bdc3c7;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
         .status {
             font-size: 1rem;
             height: 25px;
@@ -125,16 +134,16 @@
 <body>
 
     <div class="header">
-        <h1>IDEOTA</h1>
-        <p>Bitácora de Ideas Grandes & Tontas</p>
+        <h1>IDEOTAS</h1>
+        <p>Ideas Grandes & Ideas Tontas</p>
     </div>
 
     <div class="notebook-container">
-        <textarea id="noteContent" placeholder="Escribe aquí tu próxima IDEOTA..."></textarea>
+        <textarea id="noteContent" placeholder="Suelta tus IDEOTAS aquí..."></textarea>
     </div>
 
     <div class="controls">
-        <button id="sendBtn" onclick="sendToDocs()">¡REGISTRAR IDEOTA!</button>
+        <button id="sendBtn" onclick="sendToDocs()">¡REGISTRAR IDEOTAS!</button>
         <div id="statusMsg" class="status"></div>
     </div>
 
@@ -147,19 +156,18 @@
 
             if (!text) {
                 status.style.color = "#e74c3c";
-                status.innerText = "⚠️ No hay nada que registrar.";
+                status.innerText = "⚠️ No hay IDEOTAS que registrar.";
                 return;
             }
 
-            // TU NUEVA ID ACTUALIZADA
+            // TU ID ACTUALIZADA
             const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw6Hklg3ViMPU188Sl1FgZC3wq18l97Aff7ecyqgAEChOeKaYlOSrabNxFKZ1391P09/exec";
 
             btn.disabled = true;
             status.style.color = "#2c3e50";
-            status.innerText = "⏳ Enviando a tu Bitácora...";
+            status.innerText = "⏳ Guardando en la bitácora...";
 
             try {
-                // El modo 'no-cors' es necesario para scripts de Google
                 await fetch(WEB_APP_URL, {
                     method: 'POST',
                     mode: 'no-cors',
@@ -168,16 +176,14 @@
                     body: JSON.stringify({ content: text })
                 });
 
-                // Al usar 'no-cors' no podemos leer la respuesta del servidor, 
-                // así que asumimos éxito si no hay error de red.
                 status.style.color = "#27ae60";
-                status.innerText = "🚀 ¡Ideota registrada con éxito!";
+                status.innerText = "🚀 ¡Tus IDEOTAS han sido registradas!";
                 textArea.value = ""; 
                 
             } catch (error) {
                 console.error(error);
                 status.style.color = "#e74c3c";
-                status.innerText = "❌ Error al conectar con el servidor.";
+                status.innerText = "❌ Error de conexión.";
             } finally {
                 btn.disabled = false;
                 setTimeout(() => { status.innerText = ""; }, 5000);
