@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IDEOTAS - Bitácora Maestra</title>
+    
+    <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1Xq6_X5h8pDq6T0X1_X9_X8_X7_X6_X5"> 
     <style>
         :root {
             --paper-color: #ffffff;
@@ -22,11 +24,26 @@
             min-height: 100vh;
             margin: 0;
             font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
+        }
+
+        .logo-container {
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .logo-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            object-fit: cover;
+            border: 3px solid var(--primary-color);
         }
 
         .header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .header h1 {
@@ -38,7 +55,7 @@
         }
 
         .header p {
-            margin: 0;
+            margin: 5px 0 0;
             font-style: italic;
             color: #7f8c8d;
             font-weight: bold;
@@ -47,16 +64,16 @@
 
         .notebook-container {
             position: relative;
-            width: 90%;
+            width: 100%;
             max-width: 650px;
             background: var(--paper-color);
             padding: 60px 40px 40px 75px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.15);
             border-radius: 4px;
             border-left: 12px solid var(--primary-color);
+            box-sizing: border-box;
         }
 
-        /* Línea roja de margen */
         .notebook-container::before {
             content: '';
             position: absolute;
@@ -117,21 +134,19 @@
             box-shadow: 0 2px 0px #d68910;
         }
 
-        button:disabled {
-            background-color: #bdc3c7;
-            border-color: #bdc3c7;
-            box-shadow: none;
-            cursor: not-allowed;
-        }
-
         .status {
             font-size: 1rem;
             height: 25px;
             font-weight: bold;
+            text-align: center;
         }
     </style>
 </head>
 <body>
+
+    <div class="logo-container">
+        <img src="https://files.oaiusercontent.com/file-7LwA1O1uC8X0yYh8pG9S2A" alt="IDEOTAS Logo" class="logo-img">
+    </div>
 
     <div class="header">
         <h1>IDEOTAS</h1>
@@ -139,7 +154,7 @@
     </div>
 
     <div class="notebook-container">
-        <textarea id="noteContent" placeholder="Suelta tus IDEOTAS aquí..."></textarea>
+        <textarea id="noteContent" placeholder="¿Cuál es la IDEOTA de hoy?..."></textarea>
     </div>
 
     <div class="controls">
@@ -160,7 +175,6 @@
                 return;
             }
 
-            // TU ID ACTUALIZADA
             const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw6Hklg3ViMPU188Sl1FgZC3wq18l97Aff7ecyqgAEChOeKaYlOSrabNxFKZ1391P09/exec";
 
             btn.disabled = true;
